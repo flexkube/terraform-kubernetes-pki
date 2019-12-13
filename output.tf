@@ -38,3 +38,18 @@ output "service_account_private_key" {
   value       = tls_private_key.service_account.private_key_pem
   description = "Service account private key used by controller-manager for signing service accounts tokens."
 }
+
+output "kubernetes_front_proxy_ca_cert" {
+  value       = tls_locally_signed_cert.kubernetes_front_proxy_ca.cert_pem
+  description = "Kubernetes front proxy CA certificate."
+}
+
+output "kubernetes_api_server_front_proxy_client_cert" {
+  value       = tls_locally_signed_cert.api_server_front_proxy_client.cert_pem
+  description = "Kubernetes API server front proxy client certificate."
+}
+
+output "kubernetes_api_server_front_proxy_client_key" {
+  value       = tls_private_key.api_server_front_proxy_client.private_key_pem
+  description = "Kubernetes API server front proxy client private key."
+}
