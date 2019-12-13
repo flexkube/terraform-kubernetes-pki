@@ -26,7 +26,7 @@ output "kubernetes_api_server_kubelet_client_cert" {
 
 output "kubernetes_api_server_kubelet_client_key" {
   value       = tls_private_key.api_server_kubelet_client.private_key_pem
-  description = "Kubernetes API server kubelet client key."
+  description = "Kubernetes API server kubelet client private key."
 }
 
 output "service_account_public_key" {
