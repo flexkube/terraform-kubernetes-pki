@@ -1,4 +1,4 @@
-# =================== KUBERNETES CA ======================
+# Kubernetes CA private key and certificate
 resource "tls_private_key" "kubernetes_ca" {
   algorithm = "RSA"
   rsa_bits  = var.rsa_bits
@@ -34,7 +34,7 @@ resource "tls_locally_signed_cert" "kubernetes_ca" {
   ]
 }
 
-# =================== API SERVER CERT ======================
+# kube-apiserver private key and server certificate for HTTPS serving
 resource "tls_private_key" "api_server" {
   algorithm = "RSA"
   rsa_bits  = var.rsa_bits
@@ -51,13 +51,13 @@ resource "tls_cert_request" "api_server" {
 
   ip_addresses = concat([
     "127.0.0.1",
-    // First address of Service CIDR
+    # First address of Service CIDR
     "11.0.0.1",
   ], var.api_server_ips, var.api_server_external_ips)
 
   dns_names = concat([
     "localhost",
-    // Recommended by TLS certificates guide
+    # Recommended by TLS certificates guide
     "kubernetes",
     "kubernetes.default",
     "kubernetes.default.svc",
@@ -83,7 +83,7 @@ resource "tls_locally_signed_cert" "api_server" {
   ]
 }
 
-# =================== API SERVER KUBELET CLIENT CERTS ======================
+# kube-apiserver private key and client certificate for kubelet communication
 resource "tls_private_key" "api_server_kubelet_client" {
   algorithm = "RSA"
   rsa_bits  = var.rsa_bits
@@ -116,7 +116,7 @@ resource "tls_locally_signed_cert" "api_server_kubelet_client" {
   ]
 }
 
-# =================== SERVICE ACCOUNT PRIVATE KEY ======================
+# TLS private key for signing service account tokens
 resource "tls_private_key" "service_account" {
   algorithm = "RSA"
   rsa_bits  = var.rsa_bits
