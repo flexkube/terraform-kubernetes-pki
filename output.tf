@@ -53,3 +53,33 @@ output "kubernetes_api_server_front_proxy_client_key" {
   value       = tls_private_key.api_server_front_proxy_client.private_key_pem
   description = "Kubernetes API server front proxy client private key."
 }
+
+output "kubernetes_admin_cert" {
+  value       = tls_locally_signed_cert.admin.cert_pem
+  description = "Kubernetes default admin certificate."
+}
+
+output "kubernetes_admin_key" {
+  value       = tls_private_key.admin.private_key_pem
+  description = "Kubernetes default admin private key."
+}
+
+output "kube_controller_manager_cert" {
+  value       = tls_locally_signed_cert.kube_controller_manager.cert_pem
+  description = "kube-controller-manager client certificate."
+}
+
+output "kube_controller_manager_key" {
+  value       = tls_private_key.kube_controller_manager.private_key_pem
+  description = "kube-controller-manager private key."
+}
+
+output "kube_scheduler_cert" {
+  value       = tls_locally_signed_cert.kube_scheduler.cert_pem
+  description = "kube-controller-manager client certificate."
+}
+
+output "kube_scheduler_key" {
+  value       = tls_private_key.kube_scheduler.private_key_pem
+  description = "kube-controller-manager private key."
+}

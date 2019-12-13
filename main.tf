@@ -190,3 +190,102 @@ resource "tls_locally_signed_cert" "api_server_front_proxy_client" {
     "client_auth",
   ]
 }
+
+# Admin private key and certificate
+resource "tls_private_key" "admin" {
+  algorithm = "RSA"
+  rsa_bits  = var.rsa_bits
+}
+
+resource "tls_cert_request" "admin" {
+  key_algorithm   = tls_private_key.admin.algorithm
+  private_key_pem = tls_private_key.admin.private_key_pem
+
+  subject {
+    common_name  = "kubernetes-admin"
+    organization = "system:masters"
+  }
+}
+
+resource "tls_locally_signed_cert" "admin" {
+  cert_request_pem = tls_cert_request.admin.cert_request_pem
+
+  ca_key_algorithm   = tls_cert_request.kubernetes_ca.key_algorithm
+  ca_private_key_pem = tls_private_key.kubernetes_ca.private_key_pem
+  ca_cert_pem        = tls_locally_signed_cert.kubernetes_ca.cert_pem
+
+  # TODO Again, configurable
+  validity_period_hours = 8760
+
+  allowed_uses = [
+    "key_encipherment",
+    "digital_signature",
+    "client_auth",
+  ]
+}
+
+# kube-controller-manager private key and certificate
+resource "tls_private_key" "kube_controller_manager" {
+  algorithm = "RSA"
+  rsa_bits  = var.rsa_bits
+}
+
+resource "tls_cert_request" "kube_controller_manager" {
+  key_algorithm   = tls_private_key.kube_controller_manager.algorithm
+  private_key_pem = tls_private_key.kube_controller_manager.private_key_pem
+
+  subject {
+    common_name  = "system:kube-controller-manager"
+    organization = var.organization
+  }
+}
+
+resource "tls_locally_signed_cert" "kube_controller_manager" {
+  cert_request_pem = tls_cert_request.kube_controller_manager.cert_request_pem
+
+  ca_key_algorithm   = tls_cert_request.kubernetes_ca.key_algorithm
+  ca_private_key_pem = tls_private_key.kubernetes_ca.private_key_pem
+  ca_cert_pem        = tls_locally_signed_cert.kubernetes_ca.cert_pem
+
+  # TODO Again, configurable
+  validity_period_hours = 8760
+
+  allowed_uses = [
+    "key_encipherment",
+    "digital_signature",
+    "client_auth",
+  ]
+}
+
+# kube-scheduler private key and certificate
+resource "tls_private_key" "kube_scheduler" {
+  algorithm = "RSA"
+  rsa_bits  = var.rsa_bits
+}
+
+resource "tls_cert_request" "kube_scheduler" {
+  key_algorithm   = tls_private_key.kube_scheduler.algorithm
+  private_key_pem = tls_private_key.kube_scheduler.private_key_pem
+
+  subject {
+    common_name  = "system:kube-scheduler"
+    organization = var.organization
+  }
+}
+
+resource "tls_locally_signed_cert" "kube_scheduler" {
+  cert_request_pem = tls_cert_request.kube_scheduler.cert_request_pem
+
+  ca_key_algorithm   = tls_cert_request.kubernetes_ca.key_algorithm
+  ca_private_key_pem = tls_private_key.kubernetes_ca.private_key_pem
+  ca_cert_pem        = tls_locally_signed_cert.kubernetes_ca.cert_pem
+
+  # TODO Again, configurable
+  validity_period_hours = 8760
+
+  allowed_uses = [
+    "key_encipherment",
+    "digital_signature",
+    "client_auth",
+  ]
+}
